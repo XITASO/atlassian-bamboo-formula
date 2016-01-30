@@ -14,16 +14,16 @@ provisioner:
   formula: atlassian-bamboo
   vendor_path: srv/salt
   pillars-from-files:
-    bamboo.sls: pillar.example
+    atlassian-bamboo.sls: pillar.example
   pillars:
     top.sls:
       base:
         "*":
-          - bamboo.server
+          - atlassian-bamboo
   state_top:
     base:
       "*":
-        - atlassian-bamboo
+        - atlassian-bamboo.server
 
 suites:
   - name: default
