@@ -1,0 +1,9 @@
+<atlassian-user>
+    <repositories>
+{%- if 'crowd' in config %}
+        <crowd name='Crowd Repository' key='crowd'/>
+{%- else %}
+        <hibernate name="Hibernate Repository" key="hibernateRepository" description="Hibernate Repository" cache="true"/>
+{%- endif %}
+    </repositories>
+</atlassian-user>

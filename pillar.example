@@ -1,0 +1,17 @@
+atlassian-bamboo:
+  server:
+    ajp_port: 8009
+    http_port: 8085
+    crowdSSO: True
+    crowd:
+      application.name: Example Bamboo
+      application.password: SecretPassword
+      crowd.server.url: http://crowd.example.com/crowd/services/
+  agent:
+    server_url: http://localhost:8085/
+    capabilities:
+      system:
+        hg:
+          executable: /usr/bin/hg
+        git:
+          executable: /usr/bin/git

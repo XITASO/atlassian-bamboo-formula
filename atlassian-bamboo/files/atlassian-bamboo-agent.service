@@ -1,0 +1,11 @@
+[Unit]
+Description=Atlassian Bamboo Agent
+Wants=network-online.target
+
+[Service]
+User={{ config.user }}
+Environment=JAVA_HOME={{ config.java_home }}
+ExecStart={{ config.java_home }}/bin/java -jar "{{ config.jar }}" "{{ config.server_url }}/agentServer/"
+
+[Install]
+WantedBy=multi-user.target
