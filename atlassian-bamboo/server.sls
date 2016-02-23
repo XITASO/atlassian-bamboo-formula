@@ -140,7 +140,7 @@ bamboo-script-{{ file }}:
       - service: bamboo
 {% endfor %}
 
-{% if 'crowd' in bamboo.server %}
+{% if bamboo.server.get('crowd') %}
 bamboo-crowd-properties:
   file.managed:
     - name: {{ bamboo.server.dirs.home }}/xml-data/configuration/crowd.properties
@@ -149,7 +149,7 @@ bamboo-crowd-properties:
     - require:
       - file: bamboo-home
 
-{% for key, val in bamboo.server.crowd.iteritems() %}
+{% for key, val in bamboo.server.crowd.items() %}
 bamboo-crowd-{{ key }}:
   file.replace:
     - name: {{ bamboo.server.dirs.home }}/xml-data/configuration/crowd.properties

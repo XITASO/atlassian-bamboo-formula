@@ -46,8 +46,8 @@ bamboo-agent-graceful-down:
 
 bamboo-agent-install:
   cmd.run:
-    - name: curl "{{ bamboo.agent.url }}" --silent -o "{{ bamboo.agent.current_jar }}"
-    - unless: test -f "{{ bamboo.agent.current_jar }}"
+    - name: 'curl "{{ bamboo.agent.url }}" --silent -o "{{ bamboo.agent.current_jar }}"'
+    - unless: 'test -f "{{ bamboo.agent.current_jar }}"'
     - cwd: {{ bamboo.agent.dir }}
     - require:
       - file: bamboo-agent-dir
@@ -69,7 +69,7 @@ bamboo-agent-dir:
     - makedirs: True
 
 {%- macro capability(content = {}, prefix = [], seperator = '.') %}
-{%- for key, val in content.iteritems()  %}
+{%- for key, val in content.items()  %}
 {%- set newPrefix = prefix[:] %}
 {%- do newPrefix.append(key) %}
 {%- if val is string %}
