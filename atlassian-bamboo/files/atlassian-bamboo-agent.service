@@ -6,6 +6,8 @@ Wants=network-online.target
 User={{ config.user }}
 Environment=JAVA_HOME={{ config.java_home }}
 ExecStart={{ config.java_home }}/bin/java -jar "{{ config.jar }}" "{{ config.server_url }}/agentServer/"
+Restart=always
+RestartSec=10s
 
 [Install]
 WantedBy=multi-user.target
