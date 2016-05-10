@@ -45,45 +45,39 @@
     -->
     <Service name="Catalina">
 
-{% if config.get('http_port') %}
-        <Connector port="{{ config.http_port }}"
+{%- if config.get('http_port') %}
+        <Connector
+            protocol="HTTP/1.1"
+            port="{{ config.http_port }}"
 
-                   maxThreads="150"
-                   minSpareThreads="25"
-                   connectionTimeout="20000"
+            maxThreads="150" minSpareThreads="25"
+            connectionTimeout="20000"
+            disableUploadTimeout="true"
+            acceptCount="100"
 
-                   enableLookups="false"
-                   maxHttpHeaderSize="8192"
-                   protocol="HTTP/1.1"
-                   useBodyEncodingForURI="true"
-                   redirectPort="8443"
-                   acceptCount="100"
-                   disableUploadTimeout="true"
-                   URIEncoding="UTF-8"/>
-{% endif %}
+            enableLookups="false"
+            maxHttpHeaderSize="8192"
+            useBodyEncodingForURI="true"
+            URIEncoding="UTF-8"
+
+            redirectPort="8443"
+            />
+{%- endif %}
 
         <!--
         ====================================================================================
-
         To run Bamboo via HTTPS:
-        
              * Uncomment the Connector below
              * Execute:
                  %JAVA_HOME%\bin\keytool -genkey -alias tomcat -keyalg RSA (Windows)
                  $JAVA_HOME/bin/keytool -genkey -alias tomcat -keyalg RSA  (Unix)
                with a password value of "changeit" for both the certificate and the keystore itself.
-             * If you are on JDK1.3 or earlier, download and install JSSE 1.0.2 or later, and put the JAR files into
-               "$JAVA_HOME/jre/lib/ext"
              * Restart and visit https://localhost:8443/
 
              For more info, see :
-
               https://confluence.atlassian.com/display/BAMBOO/Securing+Bamboo+with+Tomcat+using+SSL
-
               and
-
-              http://tomcat.apache.org/tomcat-7.0-doc/ssl-howto.html
-              
+              http://tomcat.apache.org/tomcat-8.0-doc/ssl-howto.html
         ====================================================================================
         -->
         <!--
@@ -126,6 +120,8 @@
             <Valve className="org.apache.catalina.valves.AccessLogValve" resolveHosts="false"
                    pattern="%a %t &quot;%m %U%q %H&quot; %s %b %D &quot;%{Referer}i&quot; &quot;%{User-Agent}i&quot;"/>
 
+            <!-- StuckThreadDetectionValve added below to print stack traces if a thread has been stuck for 60 seconds -->
+            <Valve className="org.apache.catalina.valves.StuckThreadDetectionValve" threshold="60" />
         </Engine>
     </Service>
 </Server>
