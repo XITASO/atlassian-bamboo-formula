@@ -1,11 +1,11 @@
 atlassian-bamboo:
-  version: 5.11.3
+  version: 5.12.0.2
   server:
     dir: /opt/atlassian/bamboo
     ajp_port: 8009
     user: bamboo
     group: bamboo
-    crowdSSO: False
+    crowdSSO: false
     catalina_opts: -Xms1536m -Xmx1536m
   agent:
     dir: /opt/atlassian/bamboo-agent
