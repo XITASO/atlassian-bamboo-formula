@@ -169,6 +169,8 @@ bamboo-atlassian-user:
     - name: {{ bamboo.server.dirs.home }}/xml-data/configuration/atlassian-user.xml
     - source: salt://atlassian-bamboo/files/atlassian-user.xml
     - template: jinja
+    - user: {{ bamboo.server.user }}
+    - group: {{ bamboo.server.group }}
     - defaults:
         config: {{ bamboo.server }}
     - require:
