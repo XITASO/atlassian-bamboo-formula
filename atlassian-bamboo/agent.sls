@@ -31,9 +31,8 @@ bamboo-agent:
   service.running:
     - name: atlassian-bamboo-agent
     - enable: True
-    - require:
-      - file: bamboo-agent
     - watch:
+      - file: bamboo-agent
       - file: bamboo-agent-capabilities
 
 bamboo-agent-graceful-down:
@@ -58,6 +57,16 @@ bamboo-agent-install:
     - require:
       - cmd: bamboo-agent-install
     - watch_in:
+      - service: bamboo-agent
+
+bamboo-agent-permission:
+  file.managed:
+    - name: {{ bamboo.agent.current_jar }}
+    - user: {{ bamboo.agent.user }}
+    - group: {{ bamboo.agent.group }}
+    - require:
+      - file: bamboo-agent-install
+    - require_in:
       - service: bamboo-agent
 
 bamboo-agent-dir:

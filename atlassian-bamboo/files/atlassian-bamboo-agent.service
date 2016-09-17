@@ -5,7 +5,7 @@ Wants=network-online.target
 [Service]
 User={{ config.user }}
 Environment=JAVA_HOME={{ config.java_home }}
-ExecStart={{ config.java_home }}/bin/java -jar "{{ config.jar }}" "{{ config.server_url }}/agentServer/"
+ExecStart={{ config.java_home }}/bin/java -jar "{{ config.jar }}" "{{ config.server_url }}/agentServer/" {{ config.get('security_token') }}
 Restart=always
 RestartSec=10s
 

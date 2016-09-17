@@ -18,9 +18,9 @@
 }) %}
 
 {% do bamboo.agent.update({
-  'jar': bamboo.agent.dir + '/atlassian-bamboo-agent-install.jar',
-  'current_jar': bamboo.agent.dir + '/atlassian-bamboo-agent-install-' + bamboo.version + '.jar',
+  'jar': bamboo.agent.dir + '/bamboo-agent.jar',
+  'current_jar': bamboo.agent.dir + '/bamboo-agent-' + bamboo.version + '.jar',
   'home': bamboo.agent.dir + '/home',
-  'url': bamboo.agent.server_url + '/agentServer/agentInstaller/atlassian-bamboo-agent-installer-' + bamboo.version + '.jar',
+  'url': bamboo.agent.server_url + '/admin/agent/bamboo-agent-' + bamboo.version + '.jar',
   'java_home': java.jre8.home
 }) %}
