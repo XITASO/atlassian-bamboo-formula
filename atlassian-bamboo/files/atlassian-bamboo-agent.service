@@ -3,9 +3,11 @@ Description=Atlassian Bamboo Agent (%i)
 Wants=network-online.target
 
 [Service]
+Type=forking
+PIDFile={{ config.home }}/%i/bin/bamboo-agent.pid
 User={{ config.user }}
-Environment=JAVA_HOME={{ config.java_home }}
-ExecStart={{ config.java_home }}/bin/java -Dbamboo.home={{ config.home }}/%i -jar "{{ config.jar }}" "{{ config.server_url }}/agentServer/" {{ config.get('security_token', '') }}
+ExecStart={{ config.dir }}/run-agent.sh %i start
+ExecStop={{ config.dir }}/run-agent.sh %i stop
 Restart=always
 RestartSec=10s
 

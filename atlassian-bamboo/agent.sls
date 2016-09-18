@@ -35,9 +35,19 @@ bamboo-agent-{{ agent }}:
     - enable: True
     - watch:
       - file: bamboo-agent
-      - file: bamboo-agent-install
+      - file: bamboo-agent-run-sh
       - file: bamboo-agent-capabilities
+    - require:
+      - cmd: bamboo-agent-install-{{ agent }}
       - file: bamboo-agent-capabilities-{{ agent }}
+
+bamboo-agent-install-{{ agent }}:
+  cmd.run:
+    - name: "{{ bamboo.agent.java_home }}/bin/java -Dbamboo.home={{ bamboo.agent.home }}/{{ agent }} -jar {{ bamboo.agent.installer_jar }} {{ bamboo.agent.server_url }}/agentServer/ {{ '-t ' + bamboo.agent.security_token if bamboo.agent.get('security_token') else '' }} install"
+    - unless: 'test -f {{ bamboo.agent.home }}/{{ agent }}/bin/bamboo-agent.sh'
+    - runas: {{ bamboo.agent.user }}
+    - require:
+      - cmd: bamboo-agent-installer
 
 bamboo-agent-capabilities-{{ agent }}:
   file.symlink:
@@ -47,42 +57,17 @@ bamboo-agent-capabilities-{{ agent }}:
     - user: {{ bamboo.agent.user }}
     - group: {{ bamboo.agent.group }}
     - require:
+      - cmd: bamboo-agent-install-{{ agent }}
       - file: bamboo-agent-capabilities
-
-bamboo-agent-graceful-down-{{ agent }}:
-  service.dead:
-    - name: atlassian-bamboo-agent@{{ agent }}
-    - require:
-      - module: bamboo-agent
-    - prereq:
-      - file: bamboo-agent-install
 {% endfor %}
 
-bamboo-agent-install:
+bamboo-agent-installer:
   cmd.run:
-    - name: 'curl "{{ bamboo.agent.url }}" --silent -o "{{ bamboo.agent.current_jar }}"'
-    - unless: 'test -f "{{ bamboo.agent.current_jar }}"'
+    - name: 'curl "{{ bamboo.agent.url }}" --silent -o "{{ bamboo.agent.installer_jar }}"'
+    - unless: 'test -f "{{ bamboo.agent.installer_jar }}"'
     - cwd: {{ bamboo.agent.dir }}
     - require:
       - file: bamboo-agent-dir
-
-  file.symlink:
-    - name: {{ bamboo.agent.jar }}
-    - target: {{ bamboo.agent.current_jar }}
-    - require:
-      - cmd: bamboo-agent-install
-    - watch_in:
-      - service: bamboo-agent
-
-bamboo-agent-permission:
-  file.managed:
-    - name: {{ bamboo.agent.current_jar }}
-    - user: {{ bamboo.agent.user }}
-    - group: {{ bamboo.agent.group }}
-    - require:
-      - file: bamboo-agent-install
-    - require_in:
-      - service: bamboo-agent
 
 bamboo-agent-dir:
   file.directory:
@@ -91,6 +76,17 @@ bamboo-agent-dir:
     - user: root
     - group: root
     - makedirs: True
+
+bamboo-agent-run-sh:
+  file.managed:
+    - name: {{ bamboo.agent.dir }}/run-agent.sh
+    - mode: 755
+    - require:
+      - file: bamboo-agent-dir
+    - contents: |
+        #!/bin/sh
+        export JAVA_HOME={{ bamboo.agent.java_home }}
+        {{ bamboo.agent.home }}/$1/bin/bamboo-agent.sh $2
 
 {%- macro capability(content = {}, prefix = [], seperator = '.') %}
 {%- for key, val in content.items()  %}

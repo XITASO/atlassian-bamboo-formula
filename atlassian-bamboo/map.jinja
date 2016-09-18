@@ -18,8 +18,7 @@
 }) %}
 
 {% do bamboo.agent.update({
-  'jar': bamboo.agent.dir + '/atlassian-bamboo-agent-install.jar',
-  'current_jar': bamboo.agent.dir + '/atlassian-bamboo-agent-install-' + bamboo.version + '.jar',
+  'installer_jar': bamboo.agent.dir + '/atlassian-bamboo-agent-install-' + bamboo.version + '.jar',
   'home': bamboo.agent.dir + '/home',
   'url': bamboo.agent.server_url + '/agentServer/agentInstaller/atlassian-bamboo-agent-installer-' + bamboo.version + '.jar',
   'java_home': java.jre8.home
