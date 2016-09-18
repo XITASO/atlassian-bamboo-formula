@@ -5,7 +5,7 @@ include:
 
 bamboo-agent:
   file.managed:
-    - name: /etc/systemd/system/atlassian-bamboo-agent.service
+    - name: /etc/systemd/system/atlassian-bamboo-agent@.service
     - source: salt://atlassian-bamboo/files/atlassian-bamboo-agent.service
     - template: jinja
     - defaults:
@@ -28,20 +28,35 @@ bamboo-agent:
       - group: bamboo-agent
       - file: bamboo-agent-dir
 
+{% for agent in bamboo.agent.get('agents', []) %}
+bamboo-agent-{{ agent }}:
   service.running:
-    - name: atlassian-bamboo-agent
+    - name: atlassian-bamboo-agent@{{ agent }}
     - enable: True
     - watch:
       - file: bamboo-agent
+      - file: bamboo-agent-install
+      - file: bamboo-agent-capabilities
+      - file: bamboo-agent-capabilities-{{ agent }}
+
+bamboo-agent-capabilities-{{ agent }}:
+  file.symlink:
+    - name: {{ bamboo.agent.home }}/{{ agent }}/bin/bamboo-capabilities.properties
+    - target: {{ bamboo.agent.dir }}/bamboo-capabilities.properties
+    - makedirs: True
+    - user: {{ bamboo.agent.user }}
+    - group: {{ bamboo.agent.group }}
+    - require:
       - file: bamboo-agent-capabilities
 
-bamboo-agent-graceful-down:
+bamboo-agent-graceful-down-{{ agent }}:
   service.dead:
-    - name: atlassian-bamboo-agent
+    - name: atlassian-bamboo-agent@{{ agent }}
     - require:
       - module: bamboo-agent
     - prereq:
       - file: bamboo-agent-install
+{% endfor %}
 
 bamboo-agent-install:
   cmd.run:
@@ -91,10 +106,11 @@ bamboo-agent-dir:
 
 bamboo-agent-capabilities:
   file.managed:
-    - name: {{ bamboo.agent.home }}/bamboo-agent-home/bin/bamboo-capabilities.properties
-    - user: {{ bamboo.agent.user }}
-    - group: {{ bamboo.agent.group }}
-    - makedirs: True
+    - name: {{ bamboo.agent.dir }}/bamboo-capabilities.properties
+    - user: root
+    - group: root
+    - require:
+      - file: bamboo-agent-dir
     - contents: |
         # Capabilities managed by salt
         {{ capability(bamboo.agent.get('capabilities', {}))|indent(8) }}

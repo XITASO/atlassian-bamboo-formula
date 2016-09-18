@@ -1,11 +1,11 @@
 [Unit]
-Description=Atlassian Bamboo Agent
+Description=Atlassian Bamboo Agent (%i)
 Wants=network-online.target
 
 [Service]
 User={{ config.user }}
 Environment=JAVA_HOME={{ config.java_home }}
-ExecStart={{ config.java_home }}/bin/java -jar "{{ config.jar }}" "{{ config.server_url }}/agentServer/" {{ config.get('security_token') }}
+ExecStart={{ config.java_home }}/bin/java -Dbamboo.home={{ config.home }}/%i -jar "{{ config.jar }}" "{{ config.server_url }}/agentServer/" {{ config.get('security_token', '') }}
 Restart=always
 RestartSec=10s
 

@@ -9,6 +9,9 @@ atlassian-bamboo:
       crowd.server.url: http://crowd.example.com/crowd/services/
   agent:
     server_url: http://localhost:8085/
+    agents:
+      - agent-1
+      - agent-2
     capabilities:
       system:
         hg:

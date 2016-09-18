@@ -12,3 +12,5 @@ atlassian-bamboo:
     server_url: http://localhost:8085/
     user: bamboo
     group: bamboo
+    agents:
+      - agent-1
