@@ -54,11 +54,7 @@ bamboo-install:
   archive.extracted:
     - name: {{ bamboo.server.dirs.extract }}
     - source: {{ bamboo.server.source }}
-    - archive_format: tar
-    - tar_options: z
     - if_missing: {{ bamboo.server.dirs.current_install }}
-    - user: root
-    - group: root
     - keep: True
     - require:
       - file: bamboo-extractdir
