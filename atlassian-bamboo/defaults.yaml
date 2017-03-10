@@ -1,5 +1,5 @@
 atlassian-bamboo:
-  version: 5.15.2
+  version: 5.15.3
   server:
     dir: /opt/atlassian/bamboo
     ajp_port: 8009
