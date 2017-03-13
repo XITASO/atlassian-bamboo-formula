@@ -46,8 +46,6 @@ bamboo-download:
   cmd.run:
     - name: "curl -L --silent '{{ bamboo.server.url }}' > '{{ bamboo.server.source }}'"
     - unless: "test -f '{{ bamboo.server.source }}'"
-    - prereq:
-      - archive: bamboo-install
 {% endif %}
 
 bamboo-install:
@@ -58,6 +56,7 @@ bamboo-install:
     - keep: True
     - require:
       - file: bamboo-extractdir
+      - cmd: bamboo-download
 
   file.symlink:
     - name: {{ bamboo.server.dirs.install }}
