@@ -3,6 +3,11 @@
 include:
   - java
 
+bamboo-dependencies:
+  pkg.installed:
+    - pkgs:
+      - libxslt
+
 bamboo:
   file.managed:
     - name: /etc/systemd/system/atlassian-bamboo.service
@@ -46,6 +51,8 @@ bamboo-download:
   cmd.run:
     - name: "curl -L --silent '{{ bamboo.server.url }}' > '{{ bamboo.server.source }}'"
     - unless: "test -f '{{ bamboo.server.source }}'"
+    - require:
+      - file: bamboo-tempdir
 {% endif %}
 
 bamboo-install:
@@ -53,6 +60,7 @@ bamboo-install:
     - name: {{ bamboo.server.dirs.extract }}
     - source: {{ bamboo.server.source }}
     - if_missing: {{ bamboo.server.dirs.current_install }}
+    - options: z
     - keep: True
     - require:
       - file: bamboo-extractdir
@@ -66,15 +74,27 @@ bamboo-install:
     - watch_in:
       - service: bamboo
 
-bamboo-serverxml:
+bamboo-server-xsl:
   file.managed:
-    - name: {{ bamboo.server.dirs.install }}/conf/server.xml
-    - source: salt://atlassian-bamboo/files/server.xml
+    - name: {{ bamboo.server.dirs.temp }}/server.xsl
+    - source: salt://atlassian-bamboo/files/server.xsl
     - template: jinja
-    - defaults:
-        config: {{ bamboo.server }}
     - require:
       - file: bamboo-install
+
+  cmd.run:
+    - name: 'xsltproc --stringparam pHttpPort "{{ bamboo.server.get('http_port', '') }}" --stringparam pHttpScheme "{{ bamboo.server.get('http_scheme', '') }}" --stringparam pHttpProxyName "{{ bamboo.server.get('http_proxyName', '') }}" --stringparam pHttpProxyPort "{{ bamboo.server.get('http_proxyPort', '') }}" --stringparam pAjpPort "{{ bamboo.server.get('ajp_port', '') }}" -o "{{ bamboo.server.dirs.temp }}/server.xml" "{{ bamboo.server.dirs.temp }}/server.xsl" server.xml'
+    - cwd: {{ bamboo.server.dirs.install }}/conf
+    - require:
+      - file: bamboo-server-xsl
+      - file: bamboo-tempdir
+
+bamboo-server-xml:
+  file.managed:
+    - name: {{ bamboo.server.dirs.install }}/conf/server.xml
+    - source: {{ bamboo.server.dirs.temp }}/server.xml
+    - require:
+      - cmd: bamboo-server-xsl
     - watch_in:
       - service: bamboo
 
@@ -91,6 +111,12 @@ bamboo-scriptdir:
     - name: {{ bamboo.server.dirs.scripts }}
     - use:
       - file: bamboo-dir
+
+bamboo-tempdir:
+  file.directory:
+  - name: {{ bamboo.server.dirs.temp }}
+  - use:
+    - file: bamboo-dir
 
 bamboo-home:
   file.directory:
