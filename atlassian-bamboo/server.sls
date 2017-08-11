@@ -167,6 +167,7 @@ bamboo-crowd-properties:
     - name: {{ bamboo.server.dirs.home }}/xml-data/configuration/crowd.properties
     - user: {{ bamboo.server.user }}
     - group: {{ bamboo.server.group }}
+    - makedirs: True
     - require:
       - file: bamboo-home
 
