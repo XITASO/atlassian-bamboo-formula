@@ -2,7 +2,7 @@ atlassian-bamboo:
   server:
     ajp_port: 8009
     http_port: 8085
-    crowdSSO: True
+    crowdSSO: False
     crowd:
       application.name: Example Bamboo
       application.password: SecretPassword
