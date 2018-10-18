@@ -1,5 +1,5 @@
 atlassian-bamboo:
-  version: 6.6.3
+  version: 6.7.1
   server:
     dir: /opt/atlassian/bamboo
     user: bamboo
