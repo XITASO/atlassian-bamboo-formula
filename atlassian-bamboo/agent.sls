@@ -9,7 +9,7 @@ bamboo-agent:
     - source: salt://atlassian-bamboo/files/atlassian-bamboo-agent.service
     - template: jinja
     - defaults:
-        config: {{ bamboo.agent }}
+        config: {{ bamboo.agent|json }}
 
   module.wait:
     - name: service.systemctl_reload
@@ -110,3 +110,4 @@ bamboo-agent-capabilities:
     - contents: |
         # Capabilities managed by salt
         {{ capability(bamboo.agent.get('capabilities', {}))|indent(8) }}
+

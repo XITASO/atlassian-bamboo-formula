@@ -14,7 +14,7 @@ bamboo:
     - source: salt://atlassian-bamboo/files/atlassian-bamboo.service
     - template: jinja
     - defaults:
-        config: {{ bamboo.server }}
+        config: {{ bamboo.server|json }}
 
   module.wait:
     - name: service.systemctl_reload
@@ -154,7 +154,7 @@ bamboo-script-{{ file }}:
     - mode: 755
     - template: jinja
     - defaults:
-        config: {{ bamboo.server }}
+        config: {{ bamboo.server|json }}
     - require:
       - file: bamboo-scriptdir
     - watch_in:
@@ -194,7 +194,7 @@ bamboo-atlassian-user:
     - user: {{ bamboo.server.user }}
     - group: {{ bamboo.server.group }}
     - defaults:
-        config: {{ bamboo.server }}
+        config: {{ bamboo.server|json }}
     - require:
       - file: bamboo-home
       - file: bamboo-home-configuration
@@ -208,7 +208,7 @@ bamboo-dbconfig:
     - source: salt://atlassian-bamboo/files/dbconfig.xml
     - template: jinja
     - defaults:
-        dbconfig: {{ bamboo.server.get('dbconfig', {}) }}
+        dbconfig: {{ bamboo.server.get('dbconfig', {})|json }}
     - require:
       - file: bamboo-home
     - watch_in:
@@ -249,3 +249,4 @@ bamboo-enable-CrowdBambooAuthenticator:
         {% if bamboo.server.crowdSSO %}\1\2{% else %}\1<!-- \2 -->{% endif %}
     - watch_in:
       - service: bamboo
+
