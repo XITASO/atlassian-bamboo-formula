@@ -1,15 +1,15 @@
 atlassian-bamboo:
-  version: 6.8.1
-  server:
-    dir: /opt/atlassian/bamboo
-    user: bamboo
-    group: bamboo
-    crowdSSO: false
-    catalina_opts: -Xms1536m -Xmx1536m
   agent:
-    dir: /opt/atlassian/bamboo-agent
-    server_url: http://localhost:8085/
-    user: bamboo
-    group: bamboo
     agents:
     - agent-1
+    dir: /opt/atlassian/bamboo-agent
+    group: bamboo
+    server_url: http://localhost:8085/
+    user: bamboo
+  server:
+    catalina_opts: -Xms1536m -Xmx1536m
+    crowdSSO: false
+    dir: /opt/atlassian/bamboo
+    group: bamboo
+    user: bamboo
+  version: 6.9.0
