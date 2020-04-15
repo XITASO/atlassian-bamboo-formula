@@ -12,4 +12,4 @@ atlassian-bamboo:
     dir: /opt/atlassian/bamboo
     group: bamboo
     user: bamboo
-  version: 7.0.2
+  version: 7.0.3
