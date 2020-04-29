@@ -71,7 +71,7 @@ bamboo-server-xsl:
     - source: salt://atlassian-bamboo/files/server.xsl
     - template: jinja
     - require:
-      - file: bamboo-install
+      - file: bamboo-tempdir
 
   cmd.run:
     - name: 'xsltproc --stringparam pHttpPort "{{ bamboo.server.get('http_port', '') }}" --stringparam pHttpScheme "{{ bamboo.server.get('http_scheme', '') }}" --stringparam pHttpProxyName "{{ bamboo.server.get('http_proxyName', '') }}" --stringparam pHttpProxyPort "{{ bamboo.server.get('http_proxyPort', '') }}" --stringparam pAjpPort "{{ bamboo.server.get('ajp_port', '') }}" -o "{{ bamboo.server.dirs.temp }}/server.xml" "{{ bamboo.server.dirs.temp }}/server.xsl" server.xml'
