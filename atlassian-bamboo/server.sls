@@ -74,7 +74,14 @@ bamboo-server-xsl:
       - file: bamboo-tempdir
 
   cmd.run:
-    - name: 'xsltproc --stringparam pHttpPort "{{ bamboo.server.get('http_port', '') }}" --stringparam pHttpScheme "{{ bamboo.server.get('http_scheme', '') }}" --stringparam pHttpProxyName "{{ bamboo.server.get('http_proxyName', '') }}" --stringparam pHttpProxyPort "{{ bamboo.server.get('http_proxyPort', '') }}" --stringparam pAjpPort "{{ bamboo.server.get('ajp_port', '') }}" -o "{{ bamboo.server.dirs.temp }}/server.xml" "{{ bamboo.server.dirs.temp }}/server.xsl" server.xml'
+    - name: |
+        xsltproc \
+          --stringparam pHttpPort "{{ bamboo.server.get('http_port', '') }}" \
+          --stringparam pHttpScheme "{{ bamboo.server.get('http_scheme', '') }}" \
+          --stringparam pHttpProxyName "{{ bamboo.server.get('http_proxyName', '') }}" \
+          --stringparam pHttpProxyPort "{{ bamboo.server.get('http_proxyPort', '') }}" \
+          --stringparam pAjpPort "{{ bamboo.server.get('ajp_port', '') }}" \
+          -o "{{ bamboo.server.dirs.temp }}/server.xml" "{{ bamboo.server.dirs.temp }}/server.xsl" server.xml
     - cwd: {{ bamboo.server.dirs.install }}/conf
     - require:
       - file: bamboo-server-xsl
