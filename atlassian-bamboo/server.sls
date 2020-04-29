@@ -78,7 +78,7 @@ bamboo-server-xsl:
     - cwd: {{ bamboo.server.dirs.install }}/conf
     - require:
       - file: bamboo-server-xsl
-      - file: bamboo-tempdir
+      - file: bamboo-install
 
 bamboo-server-xml:
   file.managed:
