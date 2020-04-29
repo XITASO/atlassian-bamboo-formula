@@ -46,25 +46,16 @@ bamboo-graceful-down:
     - prereq:
       - file: bamboo-install
 
-{% if bamboo.server.download %}
-bamboo-download:
-  cmd.run:
-    - name: "curl -L --silent '{{ bamboo.server.url }}' > '{{ bamboo.server.source }}'"
-    - unless: "test -f '{{ bamboo.server.source }}'"
-    - require:
-      - file: bamboo-tempdir
-{% endif %}
-
 bamboo-install:
   archive.extracted:
     - name: {{ bamboo.server.dirs.extract }}
-    - source: {{ bamboo.server.source }}
+    - source: {{ bamboo.server.url }}
     - if_missing: {{ bamboo.server.dirs.current_install }}
+    - skip_verify: True
     - options: z
     - keep: True
     - require:
       - file: bamboo-extractdir
-      - cmd: bamboo-download
 
   file.symlink:
     - name: {{ bamboo.server.dirs.install }}

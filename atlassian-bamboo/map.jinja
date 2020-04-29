@@ -3,8 +3,6 @@
 {% from 'java/map.jinja' import java with context %}
 
 {% do bamboo.server.update({
-  'source': bamboo.server.get('source', bamboo.server.dir ~ '/temp/atlassian-bamboo-' ~ bamboo.version ~ '.tar.gz'),
-  'download': bamboo.server.get('download') or not bamboo.server.get('source'),
   'url': bamboo.server.get('url', 'https://www.atlassian.com/software/bamboo/downloads/binary/atlassian-bamboo-' + bamboo.version + '.tar.gz'),
   'pid': bamboo.server.dir + '/home/atlassian-bamboo.pid',
   'java_home': java.jre8.home,
