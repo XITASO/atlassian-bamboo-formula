@@ -2,8 +2,8 @@
 atlassian-bamboo-formula
 ========================
 
-.. image:: https://travis-ci.org/XITASO/atlassian-bamboo-formula.svg?branch=master
-    :target: https://travis-ci.org/XITASO/atlassian-bamboo-formula
+.. image:: https://travis-ci.com/XITASO/atlassian-bamboo-formula.svg?branch=master
+    :target: https://travis-ci.com/XITASO/atlassian-bamboo-formula
 
 Installs the Atlassian Bamboo Server and Remote Agent.
 
