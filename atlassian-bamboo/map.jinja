@@ -5,7 +5,7 @@
 {% do bamboo.server.update({
   'url': bamboo.server.get('url', 'https://www.atlassian.com/software/bamboo/downloads/binary/atlassian-bamboo-' + bamboo.version + '.tar.gz'),
   'pid': bamboo.server.dir + '/home/atlassian-bamboo.pid',
-  'java_home': java.jre8.home,
+  'java_home': java[java.env].home,
   'dirs': {
     'scripts': bamboo.server.dir + '/scripts',
     'home': bamboo.server.dir + '/home',
@@ -20,5 +20,5 @@
   'installer_jar': bamboo.agent.dir + '/atlassian-bamboo-agent-install-' + bamboo.version + '.jar',
   'home': bamboo.agent.dir + '/home',
   'url': bamboo.agent.server_url + '/agentServer/agentInstaller/atlassian-bamboo-agent-installer-' + bamboo.version + '.jar',
-  'java_home': java.jre8.home
+  'java_home': java[java.env].home
 }) %}
