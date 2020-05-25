@@ -23,7 +23,6 @@ bamboo-agent:
     - name: {{ bamboo.agent.user }}
     - gid: {{ bamboo.agent.group }}
     - home: {{ bamboo.agent.home }}
-    - createhome: True
     - require:
       - group: bamboo-agent
       - file: bamboo-agent-dir
@@ -48,6 +47,7 @@ bamboo-agent-install-{{ agent }}:
     - runas: {{ bamboo.agent.user }}
     - require:
       - cmd: bamboo-agent-installer
+      - file: bamboo-agent-home
 
 bamboo-agent-capabilities-{{ agent }}:
   file.symlink:
@@ -75,6 +75,16 @@ bamboo-agent-dir:
     - mode: 755
     - user: root
     - group: root
+    - makedirs: True
+
+bamboo-agent-home:
+  file.directory:
+    - name: {{ bamboo.agent.home }}
+    - user: {{ bamboo.agent.user }}
+    - group: {{ bamboo.agent.group }}
+    - mode: 755
+    - require:
+      - file: bamboo-agent-dir
     - makedirs: True
 
 bamboo-agent-run-sh:
