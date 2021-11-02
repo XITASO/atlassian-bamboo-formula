@@ -16,5 +16,5 @@ describe port("8085") do
 end
 
 describe command('curl -L localhost:8085') do
-  its(:stdout) { should contain('Welcome to Atlassian Bamboo continuous integration server') }
+  its(:stdout) { should contain('Welcome to Bamboo') }
 end
